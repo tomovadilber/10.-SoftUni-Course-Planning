@@ -1,0 +1,238 @@
+using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace firstProblemMidleExam
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+
+            List<string> input = Console.ReadLine().Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            List<string> program = new List<string>();
+
+            foreach (string item in input)
+            {
+
+                program.AddRange(item.Split(" ", StringSplitOptions.RemoveEmptyEntries)
+                    .ToList()
+                     );
+
+            }
+
+            for (int i = 0; i < program.Count - 1; i++)
+            {
+                if (program[0] == "Data" && program[i + 1] == "Types")
+                {
+
+
+                    program[0] = "Data Types";
+                    program.RemoveAt(i + 1);
+                    break;
+                }
+            }
+
+
+            List<string> ops = Console.ReadLine().Split(":", StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            while (ops[0] != "course start")
+            {
+
+                if (ops[0] == "Add")
+                {
+
+                    bool doesExist = false;
+                    for (int i = 0; i < program.Count; i++)
+                    {
+                        if (program[i] == ops[1])
+                        {
+                            doesExist = true;
+                            break;
+                        }
+                    }
+                    if (doesExist == false)
+                    {
+                        program.Add(ops[1]);
+                    }
+                }
+                else if (ops[0] == "Insert")
+                {
+                    bool doesExist = false;
+                    for (int i = 0; i < program.Count; i++)
+                    {
+                        if (program[i] == ops[1])
+                        {
+                            doesExist = true;
+                            break;
+                        }
+                    }
+                    if (doesExist == false)
+                    {
+                        if (int.Parse(ops[2]) > program.Count - 1)
+                        {
+                            program.Insert(program.Count - 1, ops[1]);
+                        }
+                        else if (int.Parse(ops[2]) < 0)
+                        {
+                            program.Insert(0, ops[1]);
+                        }
+                        else
+                        {
+                            program.Insert(int.Parse(ops[2]), ops[1]);
+                        }
+                    }
+                }
+                else if (ops[0] == "Remove")
+                {
+
+                    string exer = ops[1] + "-Exercise";
+                    for (int i = 0; i < program.Count; i++)
+                    {
+                        if (program[i] == ops[1])
+                        {
+                            program.RemoveAt(i);
+                        }
+                    }
+
+                    for (int i = 0; i < program.Count; i++) 
+                    {
+                        if (program[i] == exer)
+                        {
+                            program.RemoveAt(i);
+                        }
+                    }
+                }
+                else if (ops[0] == "Swap")
+                {
+                    string first = ops[1];
+                    string first1 = ops[1] + "-Exercise";
+                    bool isSwapped = false;
+                    string second = ops[2];
+                    string second1 = ops[2] + "-Exercise";
+
+                    for (int i = 0; i < program.Count; i++) 
+                    {
+
+                        if (isSwapped == true)
+                        {
+                            break;
+                        }
+
+                        if (program[i] == first)
+                        {
+                            for (int j = 0; j < program.Count; j++)
+                            {
+                                if (program[j] == second)
+                                {
+                                    program[i] = second;
+                                    program[j] = first;
+                                    if (i < program.Count - 1)
+                                    {
+                                        if (program[i + 1] == first1)
+                                        {
+                                            program.Insert(j + 1, first1);
+                                            program.RemoveAt(i + 1);
+                                            isSwapped = true;
+                                        }
+                                    }
+                                    if (j < program.Count - 1)
+                                    {
+                                        if (program[j + 1] == second1)
+                                        {
+                                            program.Insert(i + 1, second1);
+                                            program.RemoveAt(j + 2);
+                                            isSwapped = true;
+                                        }
+                                    }
+                                    isSwapped = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (program[i] == second)
+                        {
+
+                            if (isSwapped == true)
+                            {
+                                break;
+                            }
+                            for (int j = 0; j < program.Count; j++)
+                            {
+                                if (program[j] == first)
+                                {
+                                    program[i] = first;
+                                    program[j] = second;
+                                    if (i < program.Count - 1)
+                                    {
+                                        if (program[i + 1] == second1)
+                                        {
+                                            program.Insert(j + 1, second1);
+                                            program.RemoveAt(i + 1);
+                                            isSwapped = true;
+                                        }
+                                    }
+                                    if (j < program.Count - 1)
+                                    {
+                                        if (program[j + 1] == first1)
+                                        {
+                                            program.Insert(i + 1, first1);
+                                            program.RemoveAt(j + 2);
+                                            isSwapped = true;
+                                        }
+                                    }
+                                    isSwapped = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+                else if (ops[0] == "Exercise")
+                {
+                    bool doesExists = false; 
+                    string toBeAdded = ops[1] + "-Exercise";
+                    for (int i = 0; i < program.Count - 1; i++)
+                    {
+                        if (program[i] == ops[1] && program[i + 1] != toBeAdded)
+                        {
+                            program.Insert(i + 1, toBeAdded);
+                            doesExists = true;
+                            break;
+                        }
+                        else if (program[i] == ops[1] && program[i + 1] == toBeAdded)
+                        {
+                            doesExists = true;
+                            break;
+                        }
+                        
+                    }
+                    if (doesExists == false)
+                    {
+                        if (program[program.Count - 1] == ops[1])
+                        {
+                            program.Add(toBeAdded);
+                        }
+                        else
+                        {
+                            program.Add(ops[1]);
+                            program.Add(toBeAdded);
+                        }
+                    }
+                }
+                ops = Console.ReadLine().Split(":", StringSplitOptions.RemoveEmptyEntries).ToList();
+            }
+
+            for (int i = 0; i < program.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}.{program[i]}");
+            }
+        }
+        
+    }
+}
